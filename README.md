@@ -1,19 +1,23 @@
-# Foodify - Yemek Sipariş Uygulaması 
+# Foodify - Food Ordering Application
 
-Foodify, Flutter kullanılarak geliştirilmiş, modern yazılım mimarisi (MVVM) ve temiz kod prensiplerine uygun bir yemek sipariş uygulamasıdır. Kullanıcıların ürünleri listelemesine, detaylarını incelemesine ve sepete ekleyip yönetmesine olanak tanır.
+Foodify is a food ordering application developed using Flutter, adhering to modern software architecture (MVVM) and clean code principles. It allows users to list products, view details, and manage the cart.
 
-##  Özellikler
+## Features
 
-- Dinamik Ürün Listeleme: REST API üzerinden anlık veri çekme ve listeleme.
-- Detaylı Ürün Sayfası: Hero animasyonları ile geçiş, dinamik fiyat hesaplama ve adet seçimi.
-- Gelişmiş Sepet Yönetimi: Sepete ürün ekleme, anlık toplam tutar hesaplama ve kaydırarak silme (swipe-to-delete)** özelliği.
-- MVVM Mimarisi: Cubit kullanılarak UI (Arayüz) ve Logic (Mantık) katmanlarının ayrılması.
-- Modern Tasarım: Kullanıcı dostu arayüz, gölgelendirmeler ve akıcı animasyonlar.
+- **Dynamic Product Listing:** Real-time data fetching and listing via REST API.
+- **Detailed Product Page:** Transitions with Hero animations, dynamic price calculation, and quantity selection.
+- **Advanced Cart Management:** Adding products to the cart, real-time total amount calculation, and **swipe-to-delete** feature.
+- **MVVM Architecture:** Separation of UI (Interface) and Logic layers using Cubit.
+- **Modern Design:** User-friendly interface, shadows, and fluid animations.
 
-## Kullanılan Teknolojiler ve Paketler
+## Technologies and Packages Used
 
-- Framework:Flutter (Dart)
-- State Management:** Flutter_Bloc (Cubit)
-- Network (İnternet):** Dio (HTTP istekleri için)
-- Mimari: MVVM / Repository Pattern
-- UI/UX: CachedNetworkImage, Hero Animations, Google Fonts
+- **Framework:** Flutter (Dart)
+- **State Management:** Flutter_Bloc (Cubit)
+- **Network:** Dio (for HTTP requests)
+- **Architecture:** MVVM / Repository Pattern
+- **UI/UX:** CachedNetworkImage, Hero Animations, Google Fonts
+
+---
+
+*Note: This project is created for educational purposes and is not affiliated with any commercial food delivery service. The name "Foodify" is used solely for demonstration.*

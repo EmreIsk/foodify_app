@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // MultiBlocProvider ile tüm Cubit'leri sisteme tanıtıyoruz
+    // MultiBlocProvider ile cubitleri sisteme tanıttım
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AnasayfaCubit()),

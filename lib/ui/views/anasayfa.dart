@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foodify_app/data%20/entity/yemekler.dart';
 import 'package:foodify_app/ui/cubit/anasayfa_cubit.dart';
-import 'package:foodify_app/ui/views/detay_sayfa.dart';
 import 'package:foodify_app/ui/views/sepet_sayfa.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:foodify_app/ui/widgets/yemek_karti.dart';
 
 class Anasayfa extends StatefulWidget {
   const Anasayfa({super.key});
@@ -14,6 +13,8 @@ class Anasayfa extends StatefulWidget {
 }
 
 class _AnasayfaState extends State<Anasayfa> {
+
+
   @override
   void initState() {
     super.initState();
@@ -23,95 +24,88 @@ class _AnasayfaState extends State<Anasayfa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // 1. ÜST BAR (APPBAR)
       appBar: AppBar(
-        title: const Text("Foodify", style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold)),
+        title: const Text(
+            "Foodify",
+            style: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.bold)
+        ),
         centerTitle: true,
         backgroundColor: Colors.deepOrange,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
             onPressed: () {
-              // Sepet sayfasına geçiş
               Navigator.push(context, MaterialPageRoute(builder: (context) => const SepetSayfa()));
             },
             icon: const Icon(Icons.shopping_cart_outlined),
           ),
         ],
       ),
-      body: BlocBuilder<AnasayfaCubit, List<Yemekler>>(
-        builder: (context, yemeklerListesi) {
-          if (yemeklerListesi.isNotEmpty) {
-            return GridView.builder(
-              itemCount: yemeklerListesi.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1 / 1.5,
+
+      // 2. GÖVDE TASARIMI (COLUMN)
+      body: Column(
+        children: [
+          // ARAMA ALANI
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "Ne yemek istersin?",
+                prefixIcon: const Icon(Icons.search, color: Colors.deepOrange),
+                filled: true,
+                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
               ),
-              itemBuilder: (context, index) {
-                var yemek = yemeklerListesi[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => DetaySayfa(yemek: yemek)));
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withValues(alpha: 0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // 1. Resim
-                        Hero(
-                          tag: yemek.yemekId,
-                          child: CachedNetworkImage(
-                            imageUrl: "http://kasimadalan.pe.hu/yemekler/resimler/${yemek.yemekResimAdi}",
-                            height: 110,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        // 2. Yemek Adı
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            yemek.yemekAdi,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        // 3. Fiyat ve Ekleme İkonu Satırı
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "${yemek.yemekFiyat} ₺",
-                                style: const TextStyle(fontSize: 16, color: Color(0xFFFF6D00), fontWeight: FontWeight.w700),
-                              ),
-                              const Icon(Icons.add_shopping_cart_rounded, color: Color(0xFFFF6D00)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+              onChanged: (aramaSonucu) {
+                // Her harfe basıldığında Cubit'teki 'ara' fonksiyonunu tetikle
+                context.read<AnasayfaCubit>().ara(aramaSonucu);
               },
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+            ),
+          ),
+
+          // LİSTELEME ALANI
+          Expanded(
+            child: BlocBuilder<AnasayfaCubit, List<Yemekler>>(
+              builder: (context, yemeklerListesi) {
+                // EĞER LİSTE DOLUYSA
+                if (yemeklerListesi.isNotEmpty) {
+                  return GridView.builder(
+                    itemCount: yemeklerListesi.length,
+                    physics: const BouncingScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.5,
+                    ),
+                    itemBuilder: (context, index) {
+                      var yemek = yemeklerListesi[index];
+                      return YemekKarti(yemek: yemek);
+                    },
+                  );
+                }
+                // Arama sonucu boşsa
+                else {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.search_off, size: 80, color: Colors.grey),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Aradığınız yemek bulunamadı ",
+                          style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
