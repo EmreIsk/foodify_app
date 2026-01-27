@@ -95,12 +95,10 @@ class _LoginSayfaState extends State<LoginSayfa> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             try {
-                              // Giriş yapmayı dene
                               await context.read<AuthCubit>().girisYap(tfEmail.text, tfPassword.text);
 
                               if (!context.mounted) return;
 
-                              // Başarılıysa yönlendir
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(builder: (context) => const Anasayfa())
@@ -109,36 +107,35 @@ class _LoginSayfaState extends State<LoginSayfa> {
                             } catch (hata) {
                               if (!context.mounted) return;
 
-                              // HATA MESAJI VE BUTON
+                              // Hata mesajını string'e çeviriyoruz
+                              String hataMesaji = hata.toString();
+
+                              // KONTROL: Eğer hata mesajı "doğrula" kelimesi içeriyorsa butonu göster, yoksa null yap (gösterme)
+                              bool mailDogrulanmamis = hataMesaji.toLowerCase().contains("doğrula");
+
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(hata.toString()),
+                                  content: Text(hataMesaji),
                                   backgroundColor: Colors.red,
-                                  duration: const Duration(seconds: 6),
+                                  duration: const Duration(seconds: 4), // 6 saniye çok uzundu, 4 ideal
                                   behavior: SnackBarBehavior.floating,
 
-                                  //Doğrulama mailini tekrar gönder
-                                  action: SnackBarAction(
+                                  // İŞTE SİHİRLİ DOKUNUŞ BURADA:
+                                  // Eğer mail doğrulanmamış hatasıysa butonu koy, değilse (şifre hatasıysa) null koy.
+                                  action: mailDogrulanmamis ? SnackBarAction(
                                     label: 'TEKRAR GÖNDER',
-                                    textColor: Colors.white, // Buton rengi
+                                    textColor: Colors.white,
                                     onPressed: () {
-                                      // Butona basınca bu kod çalışır
                                       context.read<AuthCubit>()
                                           .tekrarDogrulamaGonder(tfEmail.text, tfPassword.text)
                                           .then((_) {
                                         if(!context.mounted) return;
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(content: Text("Doğrulama maili tekrar gönderildi!"), backgroundColor: Colors.green)
-                                        );
-                                      })
-                                          .catchError((hata) {
-                                        if(!context.mounted) return;
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text("Hata: $hata"), backgroundColor: Colors.orange)
+                                            const SnackBar(content: Text("Doğrulama maili gönderildi!"), backgroundColor: Colors.green)
                                         );
                                       });
                                     },
-                                  ),
+                                  ) : null, // <-- null olunca buton hiç gözükmez
                                 ),
                               );
                             }
