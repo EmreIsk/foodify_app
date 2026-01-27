@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foodify_app/data%20/entity/yemekler.dart';
-import 'package:foodify_app/ui/cubit/detay_sayfa_cubit.dart';
+import 'package:foodify_app/features/home/data/entity/yemekler.dart';
+import 'package:foodify_app/features/product_detail/ui/cubit/detay_sayfa_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class DetaySayfa extends StatefulWidget {

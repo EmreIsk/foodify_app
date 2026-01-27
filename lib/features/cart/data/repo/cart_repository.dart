@@ -1,31 +1,11 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:foodify_app/data%20/entity/sepet_yemekler.dart';
-import 'package:foodify_app/data%20/entity/yemekler.dart';
+import 'package:flutter/foundation.dart';
+import 'package:foodify_app/features/cart/data/entity/sepet_yemekler.dart';
 
-
-class YemeklerDaoRepository {
-  List<SepetYemekler> yemeklerListesi = [];
+class CartRepository {
   var dio = Dio();
-
   String kullaniciAdi = "emre_proje";
-
-  // 1. Tüm Yemekleri Getir
-  Future<List<Yemekler>> yemekleriYukle() async {
-    String url = "http://kasimadalan.pe.hu/yemekler/tumYemekleriGetir.php";
-
-    try {
-      var cevap = await dio.get(url);
-      var jsonNesnesi = json.decode(cevap.data.toString());
-      var yemeklerListesi = jsonNesnesi["yemekler"] as List;
-
-      List<Yemekler> yemekListesiNesneleri = yemeklerListesi.map((json) => Yemekler.fromJson(json)).toList();
-      return yemekListesiNesneleri;
-    } catch (e) {
-      print("Yemekleri Yükle Hata: $e");
-      return [];
-    }
-  }
 
   // 2. Sepete Yemek Ekle
   Future<void> sepeteEkle(String yemekAdi, String yemekResimAdi, int yemekFiyat, int yemekSiparisAdet) async {
@@ -42,7 +22,7 @@ class YemeklerDaoRepository {
     try {
       await dio.post(url, data: FormData.fromMap(veri));
     } catch (e) {
-      print("Sepete Ekle Hata: $e");
+      debugPrint("Sepete Ekle Hata: $e");
     }
   }
 
@@ -68,18 +48,18 @@ class YemeklerDaoRepository {
   }
 
   // 4. Sepetten Yemek Sil
-  Future<void> sepettenSil(int sepet_yemek_id) async {
+  Future<void> sepettenSil(int sepetYemekId) async {
     String url = "http://kasimadalan.pe.hu/yemekler/sepettenYemekSil.php";
 
     var veri = {
-      "sepet_yemek_id": sepet_yemek_id.toString(),
+      "sepet_yemek_id": sepetYemekId.toString(),
       "kullanici_adi": kullaniciAdi,
     };
 
     try {
       await dio.post(url, data: FormData.fromMap(veri));
     } catch (e) {
-      print("Sepetten Sil Hata: $e");
+      debugPrint("Sepetten Sil Hata: $e");
     }
   }
 }

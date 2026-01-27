@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foodify_app/data%20/entity/yemekler.dart';
-import 'package:foodify_app/ui/cubit/anasayfa_cubit.dart';
-import 'package:foodify_app/ui/views/sepet_sayfa.dart';
+import 'package:foodify_app/features/home/data/entity/yemekler.dart';
+import 'package:foodify_app/features/home/ui/cubit/anasayfa_cubit.dart';
+import 'package:foodify_app/features/cart/ui/views/sepet_sayfa.dart';
+import 'package:foodify_app/features/home/ui/widgets/home_empty_state.dart';
+import 'package:foodify_app/features/home/ui/widgets/home_search_bar.dart';
 import 'package:foodify_app/ui/widgets/yemek_karti.dart';
 
 class Anasayfa extends StatefulWidget {
@@ -47,25 +49,7 @@ class _AnasayfaState extends State<Anasayfa> {
       body: Column(
         children: [
           // ARAMA ALANI
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Ne yemek istersin?",
-                prefixIcon: const Icon(Icons.search, color: Colors.deepOrange),
-                filled: true,
-                fillColor: Colors.grey[100],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (aramaSonucu) {
-                // Her harfe basıldığında Cubit'teki 'ara' fonksiyonunu tetikle
-                context.read<AnasayfaCubit>().ara(aramaSonucu);
-              },
-            ),
-          ),
+          const HomeSearchBar(),
 
           // LİSTELEME ALANI
           Expanded(
@@ -88,19 +72,7 @@ class _AnasayfaState extends State<Anasayfa> {
                 }
                 // Arama sonucu boşsa
                 else {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.search_off, size: 80, color: Colors.grey),
-                        const SizedBox(height: 10),
-                        Text(
-                          "Aradığınız yemek bulunamadı ",
-                          style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-                        ),
-                      ],
-                    ),
-                  );
+                  return const HomeEmptyState();
                 }
               },
             ),

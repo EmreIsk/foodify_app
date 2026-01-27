@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foodify_app/data%20/repo/yemekler_dao_repostiory.dart';
+import 'package:foodify_app/features/cart/data/repo/cart_repository.dart';
 
 
 class DetaySayfaCubit extends Cubit<void> {
-  var yrepo = YemeklerDaoRepository();
+  var yrepo = CartRepository();
 
   DetaySayfaCubit() : super(0);
 

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:foodify_app/data%20/entity/yemekler.dart';
-import 'package:foodify_app/ui/views/detay_sayfa.dart';
+import 'package:foodify_app/features/home/data/entity/yemekler.dart';
+import 'package:foodify_app/features/product_detail/ui/views/detay_sayfa.dart';
 
 class YemekKarti extends StatelessWidget {
   final Yemekler yemek;
@@ -20,7 +20,7 @@ class YemekKarti extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
-            BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 5, offset: const Offset(0, 3)),
+            BoxShadow(color: Colors.grey.withValues(alpha: 0.2), blurRadius: 5, offset: const Offset(0, 3)),
           ],
         ),
         child: Column(

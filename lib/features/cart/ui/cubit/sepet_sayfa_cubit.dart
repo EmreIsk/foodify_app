@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foodify_app/data%20/entity/sepet_yemekler.dart';
-import 'package:foodify_app/data%20/repo/yemekler_dao_repostiory.dart';
+import 'package:foodify_app/features/cart/data/entity/sepet_yemekler.dart';
+import 'package:foodify_app/features/cart/data/repo/cart_repository.dart';
 
 
 class SepetSayfaCubit extends Cubit<List<SepetYemekler>> {
-  var yrepo = YemeklerDaoRepository();
+  var yrepo = CartRepository();
 
   SepetSayfaCubit() : super(<SepetYemekler>[]);
 
@@ -13,9 +13,9 @@ class SepetSayfaCubit extends Cubit<List<SepetYemekler>> {
     emit(liste);
   }
 
-  Future<void> sil(int sepet_yemek_id) async {
+  Future<void> sil(int sepetYemekId) async {
     // Önce silme işlemini yap
-    await yrepo.sepettenSil(sepet_yemek_id);
+    await yrepo.sepettenSil(sepetYemekId);
     // Sonra güncel listeyi tekrar çekip arayüze gönder
     await sepetiYukle();
   }

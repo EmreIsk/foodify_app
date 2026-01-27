@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:foodify_app/features/product_detail/ui/cubit/detay_sayfa_cubit.dart';
+import 'package:foodify_app/features/cart/ui/cubit/sepet_sayfa_cubit.dart';
+import 'package:foodify_app/features/auth/ui/views/login_sayfa.dart';
+import 'firebase_options.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foodify_app/ui/cubit/anasayfa_cubit.dart';
-import 'package:foodify_app/ui/cubit/detay_sayfa_cubit.dart';
-import 'package:foodify_app/ui/cubit/sepet_sayfa_cubit.dart';
-import 'package:foodify_app/ui/views/anasayfa.dart';
+import 'package:foodify_app/features/home/ui/cubit/anasayfa_cubit.dart';
+import 'package:foodify_app/features/auth/ui/cubit/auth_cubit.dart';
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -14,10 +23,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // MultiBlocProvider ile cubitleri sisteme tanıttım
     return MultiBlocProvider(
       providers: [
+        // Cubitleri sisteme tanıttık
         BlocProvider(create: (context) => AnasayfaCubit()),
+        BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => DetaySayfaCubit()),
         BlocProvider(create: (context) => SepetSayfaCubit()),
       ],
@@ -25,22 +35,10 @@ class MyApp extends StatelessWidget {
         title: 'Foodify',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFFFF6D00),
-            primary: const Color(0xFFFF6D00),
-            secondary: const Color(0xFF263238),
-          ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
           useMaterial3: true,
-          scaffoldBackgroundColor: const Color(0xFFF5F5F5),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
-            titleTextStyle: TextStyle(color: Colors.black87, fontSize: 22, fontWeight: FontWeight.bold),
-            iconTheme: IconThemeData(color: Colors.black87),
-          ),
         ),
-        home: const Anasayfa(),
+        home: const LoginSayfa(),
       ),
     );
   }

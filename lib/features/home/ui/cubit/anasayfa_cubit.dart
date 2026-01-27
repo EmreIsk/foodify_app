@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:foodify_app/data%20/entity/yemekler.dart';
-import 'package:foodify_app/data%20/repo/yemekler_dao_repostiory.dart';
+import 'package:foodify_app/features/home/data/entity/yemekler.dart';
+import 'package:foodify_app/features/home/data/repo/product_repository.dart';
 import 'package:foodify_app/core/extensions/string_extensions.dart';
 
 class AnasayfaCubit extends Cubit<List<Yemekler>> {
   // Cubit oluşturulduğunda Repo'ya erişim sağlıyoruz
-  var yrepo = YemeklerDaoRepository();
+  var yrepo = ProductRepository();
 
   AnasayfaCubit() : super(<Yemekler>[]);
 
